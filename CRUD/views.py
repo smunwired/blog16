@@ -30,9 +30,15 @@ def update(request,id):
     object=Details.objects.get(id=id)
     form=detailsform(request.POST,instance=object)
     if form.is_valid:
-        form.save()
-        object=Details.objects.all()
-        return redirect('retrieve')
+        if 'add' in request.POST:
+            object.pk = None
+            form.save()
+            object=Details.objects.all()
+            return redirect('retrieve')
+        if 'update' in request.POST:
+            form.save()
+            object=Details.objects.all()
+            return redirect('retrieve')
 
 def delete(request,pk):   
     Details.objects.filter(id=pk).delete()
